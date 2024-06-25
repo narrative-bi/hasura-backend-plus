@@ -1,16 +1,16 @@
-FROM node:14-alpine AS builder
+FROM node:18-slim AS builder
 WORKDIR /app
 COPY . .
 COPY package.json yarn.lock ./
 RUN yarn install
 RUN yarn build
 
-FROM node:14-alpine
+FROM node:18-slim
 ARG NODE_ENV=production
-ENV NODE_ENV $NODE_ENV
-ENV PORT 3000
+ENV NODE_ENV=$NODE_ENV
+ENV PORT=3000
 
-ENV PGOPTIONS "-c search_path=auth"
+ENV PGOPTIONS="-c search_path=auth"
 
 WORKDIR /app
 

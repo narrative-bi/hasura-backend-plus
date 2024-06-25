@@ -1,45 +1,10 @@
 import { REGISTRATION } from './config'
-import Joi from '@hapi/joi'
-
-interface ExtendedStringSchema extends Joi.StringSchema {
-  allowedDomains(): this
-}
-
-interface ExtendedJoi extends Joi.Root {
-  string(): ExtendedStringSchema
-}
-
-const extendedJoi: ExtendedJoi = Joi.extend((joi) => ({
-  type: 'string',
-  base: joi.string(),
-  messages: {
-    'string.allowedDomains': '{{#label}} is not in an authorised domain'
-  },
-  rules: {
-    allowedDomains: {
-      method(): unknown {
-        return this.$_addRule({ name: 'allowedDomains' })
-      },
-      validate(value: string, helpers): unknown {
-        if (REGISTRATION.ALLOWED_EMAIL_DOMAINS) {
-          const lowerValue = value.toLowerCase()
-          const allowedEmailDomains = REGISTRATION.ALLOWED_EMAIL_DOMAINS.split(',')
-
-          if (allowedEmailDomains.every((domain) => !lowerValue.endsWith(domain.toLowerCase()))) {
-            return helpers.error('string.allowedDomains')
-          }
-        }
-
-        return value
-      }
-    }
-  }
-}))
+import Joi from 'joi'
 
 const passwordRule = Joi.string().min(REGISTRATION.MIN_PASSWORD_LENGTH).max(128)
 const passwordRuleRequired = passwordRule.required()
 
-const emailRule = extendedJoi.string().email().required().allowedDomains()
+const emailRule = Joi.string().email().required()
 
 const accountFields = {
   email: emailRule,
@@ -131,12 +96,12 @@ export const magicLinkLoginAnonymouslySchema = Joi.object({
   anonymous: Joi.boolean(),
   email: Joi.string() // these will be checked more rigorously in `loginSchema`
 })
-export const loginSchema = extendedJoi.object({
+export const loginSchema = Joi.object({
   email: emailRule,
   password: Joi.string().required(),
   cookie: Joi.boolean()
 })
-export const loginSchemaMagicLink = extendedJoi.object({
+export const loginSchemaMagicLink = Joi.object({
   email: emailRule,
   password: Joi.string(),
   cookie: Joi.boolean()

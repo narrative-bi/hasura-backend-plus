@@ -29,7 +29,6 @@
     }
   },
   "dependencies": {
-    "@hapi/joi": "17.1.1",
     "@nicokaiser/passport-apple": "^0.2.1",
     "@types/sharp": "^0.27.1",
     "archiver": "4.0.1",
@@ -53,6 +52,7 @@
     "graphql-tag": "2.11.0",
     "helmet": "3.22.0",
     "hibp": "9.0.0",
+    "joi": "17.13.3",
     "jose": "1.28.1",
     "js-yaml": "3.13.1",
     "lodash.kebabcase": "4.1.1",
@@ -94,7 +94,6 @@
     "@types/express-rate-limit": "5.0.0",
     "@types/express-session": "^1.17.0",
     "@types/fs-extra": "^8.1.0",
-    "@types/hapi__joi": "16.0.12",
     "@types/helmet": "0.0.45",
     "@types/jest": "^26.0.24",
     "@types/js-yaml": "3.12.3",
